@@ -1,4 +1,4 @@
-"""hw_27 URL Configuration
+"""HW28 URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -13,22 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from ads.views import *
-
-
-
-
+from ads.view.ad import root
+from hw_27 import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', root),
-
-    path('ad/', AdListCreateView.as_view()),
-    path('cat/', CategoryListCreateView.as_view()),
-    path('cat/<int:pk>',CategoryDetailView.as_view()),
-    path('ad/<int:pk>', AdDetailView.as_view()),
+    path('ad/', include('ads.urls.ad')),
+    path('cat/', include('ads.urls.category')),
+    path('user/', include('users.urls'))
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
